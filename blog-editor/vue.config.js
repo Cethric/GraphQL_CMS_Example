@@ -22,10 +22,10 @@ module.exports = {
     configureWebpack: {
         resolve: {
             plugins: [PnpWebpackPlugin],
-            alias: {
-                // Alias for using source of BootstrapVue
-                'bootstrap-vue$': 'bootstrap-vue/src/index.js',
-            },
+            // alias: {
+            //     // Alias for using source of BootstrapVue
+            //     'bootstrap-vue$': 'bootstrap-vue/src/index.js',
+            // },
         },
         resolveLoader: {
             plugins: [PnpWebpackPlugin.moduleLoader(module)],
@@ -37,16 +37,16 @@ module.exports = {
                     exclude: /node_modules/,
                     use: [{ loader: 'graphql-tag/loader' }],
                 },
-                {
-                    test: /\.js$/,
-                    include: /bootstrap-vue\/src/,
-                    use: {
-                        loader: 'babel-loader',
-                        options: {
-                            presets: ['env'],
-                        },
-                    },
-                },
+                // {
+                //     test: /\.js$/,
+                //     include: /bootstrap-vue\/src/,
+                //     use: {
+                //         loader: 'babel-loader',
+                //         options: {
+                //             presets: ['env'],
+                //         },
+                //     },
+                // },
             ],
         },
         plugins: [new LodashModuleReplacementPlugin({})],
