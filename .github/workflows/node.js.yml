@@ -16,25 +16,28 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [12.x, 14.x]
+        node-version: [ 12.x, 14.x ]
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node-version }}
-    - run: npm i -g yarn
-    - name: Cache
-      uses: actions/cache@v2.1.2
-      with:
-        path: .yarn
-        key: yarn-cache
-        restore-keys: yarn-cache
-        upload-chunk-size: 8192
-    - run: yarn set version berry
-    - run: yarn --version
-    - run: yarn install
-    - run: |
-          cd blog-editor
-          yarn build
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: npm i -g yarn
+      - name: Cache
+        uses: actions/cache@v2.1.2
+        with:
+          path: .yarn
+          key: yarn-cache
+          restore-keys: yarn-cache
+          upload-chunk-size: 8192
+      - run: |
+          yarn set version berry
+          yarn --version
+          yarn install
+        name: Install Yarn
+      - run: |
+          yarn --version
+          yarn workspace blog-editor run build
+        name: Build VueJS Client
