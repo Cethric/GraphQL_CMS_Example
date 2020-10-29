@@ -10,7 +10,7 @@
   import { Component, Prop, Ref, Vue } from 'vue-property-decorator';
   import { EditorActions } from '@/components/editor/EditorActions';
   import { createUppy, StrictUppy } from '@/components/editor/tools/Uppy';
-  import { BIcon, BImgLazy } from 'bootstrap-vue';
+  import { BImgLazy } from 'bootstrap-vue';
   import { DetailConstructor } from '@/components/DetailConstructor';
 
   @Component({})

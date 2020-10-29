@@ -30,8 +30,6 @@ jobs:
         with:
           path: .yarn
           key: yarn-cache
-          restore-keys: yarn-cache
-          upload-chunk-size: 8192
       - run: |
           yarn set version berry
           yarn --version
@@ -41,3 +39,9 @@ jobs:
           yarn --version
           yarn workspace blog-editor run build
         name: Build VueJS Client
+      - name: Upload a Build Artifact
+        uses: actions/upload-artifact@v2.2.0
+        with:
+          name: VueJS-App
+          path: blog-editor/dist
+          retention-days: 1
