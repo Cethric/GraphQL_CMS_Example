@@ -25,5 +25,8 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - run: npm i -g yarn
-    - run: /opt/hostedtoolcache/node/12.19.0/x64/bin/yarn set version berry
+    - run: yarn set version berry
     - run: yarn --version
+    - run: yarn install
+    - run: cd blog-editor
+    - run: yarn build
