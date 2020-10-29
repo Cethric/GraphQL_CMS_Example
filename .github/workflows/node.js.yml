@@ -25,8 +25,16 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - run: npm i -g yarn
+    - name: Cache
+      uses: actions/cache@v2.1.2
+      with:
+        path: .yarn
+        key: yarn-cache
+        restore-keys: yarn-cache
+        upload-chunk-size: 8192
     - run: yarn set version berry
     - run: yarn --version
     - run: yarn install
-    - run: cd blog-editor
-    - run: yarn build
+    - run: |
+          cd blog-editor
+          yarn build
