@@ -396,7 +396,7 @@ $RECYCLE.BIN/
 #!.yarn/cache
 
 # and uncomment the following lines
- .pnp.*
+.pnp.*
 
 ### VisualStudio ###
 ## Ignore Visual Studio temporary files, build results, and
