@@ -1,0 +1,17 @@
+{
+  "name": "blog-dev",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "server",
+    "blog-editor"
+  ],
+  "dependenciesMeta": {
+    "node-base64": {
+      "built": false
+    },
+    "yarn": {
+      "built": false
+    }
+  }
+}

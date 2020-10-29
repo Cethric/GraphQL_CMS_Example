@@ -1,0 +1,17 @@
+query($id: uuid!) {
+    cms_post(where: { id: { _eq: $id } }) {
+        id
+        created_at
+        updated_at
+        title
+        description
+        content
+        published_at
+        image
+        permalink
+        author {
+            name
+            picture
+        }
+    }
+}

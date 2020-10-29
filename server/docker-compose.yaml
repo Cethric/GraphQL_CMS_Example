@@ -1,0 +1,85 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres:12
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    env_file:
+      - postgres.env
+    networks:
+      postgres_network:
+    ports:
+      - "5432:5432"
+
+  auth0_graphql:
+    build:
+      context: auth0
+      dockerfile: Dockerfile
+    env_file:
+      - auth0.env
+    networks:
+      graphql_network:
+
+  hasura:
+    image: hasura/graphql-engine:v1.3.2
+    ports:
+      - "9000:8080"
+    depends_on:
+      - postgres
+      - auth0_graphql
+    env_file:
+      - hasura.env
+    networks:
+      graphql_network:
+      postgres_network:
+
+  redis:
+    image: redis:latest
+    volumes:
+      - redis_data:/data
+    networks:
+      redis_network:
+
+  tusio_comapnion_proxy:
+    build:
+      context: ./uppy
+      dockerfile: Dockerfile
+      cache_from:
+        - golang:1.12-alpine
+        - alpine:latest
+        - nginx:alpine
+        - tusd-builder
+    networks:
+      uppy_network:
+      redis_network:
+    secrets:
+      - companion_secret
+    depends_on:
+      - redis
+    env_file:
+      - ./uppy/companion.env
+    ports:
+      - "1080:1080"
+      - "3020:3020"
+    volumes:
+      - tus_hooks:/srv/tusd-hooks
+      - tus_data:/srv/tusd-data
+      - companion_data:/var/companion/data
+
+volumes:
+  postgres_data:
+  tus_data:
+  tus_hooks:
+  companion_data:
+  redis_data:
+
+networks:
+  graphql_network:
+  postgres_network:
+  redis_network:
+  uppy_network:
+
+secrets:
+  companion_secret:
+    file: ./uppy/companion_secret.txt

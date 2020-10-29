@@ -1,0 +1,5 @@
+mutation ($id: uuid $published: timestamptz) {
+    update_cms_post(where: {id: {_eq: $id}} _set: {published_at: $published }) {
+        affected_rows
+    }
+}

@@ -1,0 +1,17 @@
+mutation(
+    $title: String!
+    $image: String!
+    $description: jsonb
+    $content: jsonb
+) {
+    insert_cms_post_one(
+        object: {
+            title: $title
+            image: $image
+            description: $description
+            content: $content
+        }
+    ) {
+        id
+    }
+}

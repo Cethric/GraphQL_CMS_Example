@@ -1,0 +1,501 @@
+# This file was generated based on ".graphqlconfig". Do not edit manually.
+
+schema {
+    query: query_root
+    mutation: mutation_root
+    subscription: subscription_root
+}
+
+type Query {
+    user(id: String!): User
+    users(name: String): [User]!
+}
+
+type User {
+    created_at: DateTime!
+    email: String!
+    name: String!
+    nickname: String!
+    picture: String!
+    updated_at: DateTime!
+    user_id: ID!
+}
+
+"columns and relationships of \"cms.post\""
+type cms_post {
+    "Remote relationship field"
+    author: User
+    author_id: String!
+    content(
+        "JSON select path"
+        path: String
+    ): jsonb!
+    created_at: timestamptz!
+    description(
+        "JSON select path"
+        path: String
+    ): jsonb
+    id: uuid!
+    image: String!
+    "A computed field, executes function \"cms.get_permalink\""
+    permalink: String
+    published_at: timestamptz
+    title: String!
+    updated_at: timestamptz!
+}
+
+"aggregated selection of \"cms.post\""
+type cms_post_aggregate {
+    aggregate: cms_post_aggregate_fields
+    nodes: [cms_post!]!
+}
+
+"aggregate fields of \"cms.post\""
+type cms_post_aggregate_fields {
+    count(columns: [cms_post_select_column!], distinct: Boolean): Int
+    max: cms_post_max_fields
+    min: cms_post_min_fields
+}
+
+"aggregate max on columns"
+type cms_post_max_fields {
+    author_id: String
+    created_at: timestamptz
+    id: uuid
+    image: String
+    published_at: timestamptz
+    title: String
+    updated_at: timestamptz
+}
+
+"aggregate min on columns"
+type cms_post_min_fields {
+    author_id: String
+    created_at: timestamptz
+    id: uuid
+    image: String
+    published_at: timestamptz
+    title: String
+    updated_at: timestamptz
+}
+
+"response of any mutation on the table \"cms.post\""
+type cms_post_mutation_response {
+    "number of affected rows by the mutation"
+    affected_rows: Int!
+    "data of the affected rows by the mutation"
+    returning: [cms_post!]!
+}
+
+"mutation root"
+type mutation_root {
+    "delete data from the table: \"cms.post\""
+    delete_cms_post(
+        "filter the rows which have to be deleted"
+        where: cms_post_bool_exp!
+    ): cms_post_mutation_response
+    "delete single row from the table: \"cms.post\""
+    delete_cms_post_by_pk(id: uuid!): cms_post
+    "insert data into the table: \"cms.post\""
+    insert_cms_post(
+        "the rows to be inserted"
+        objects: [cms_post_insert_input!]!,
+        "on conflict condition"
+        on_conflict: cms_post_on_conflict
+    ): cms_post_mutation_response
+    "insert a single row into the table: \"cms.post\""
+    insert_cms_post_one(
+        "the row to be inserted"
+        object: cms_post_insert_input!,
+        "on conflict condition"
+        on_conflict: cms_post_on_conflict
+    ): cms_post
+    "update data of the table: \"cms.post\""
+    update_cms_post(
+        "append existing jsonb value of filtered columns with new jsonb value"
+        _append: cms_post_append_input,
+        "delete the field or element with specified path (for JSON arrays, negative integers count from the end)"
+        _delete_at_path: cms_post_delete_at_path_input,
+        "delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array"
+        _delete_elem: cms_post_delete_elem_input,
+        "delete key/value pair or string element. key/value pairs are matched based on their key value"
+        _delete_key: cms_post_delete_key_input,
+        "prepend existing jsonb value of filtered columns with new jsonb value"
+        _prepend: cms_post_prepend_input,
+        "sets the columns of the filtered rows to the given values"
+        _set: cms_post_set_input,
+        "filter the rows which have to be updated"
+        where: cms_post_bool_exp!
+    ): cms_post_mutation_response
+    "update single row of the table: \"cms.post\""
+    update_cms_post_by_pk(
+        "append existing jsonb value of filtered columns with new jsonb value"
+        _append: cms_post_append_input,
+        "delete the field or element with specified path (for JSON arrays, negative integers count from the end)"
+        _delete_at_path: cms_post_delete_at_path_input,
+        "delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array"
+        _delete_elem: cms_post_delete_elem_input,
+        "delete key/value pair or string element. key/value pairs are matched based on their key value"
+        _delete_key: cms_post_delete_key_input,
+        "prepend existing jsonb value of filtered columns with new jsonb value"
+        _prepend: cms_post_prepend_input,
+        "sets the columns of the filtered rows to the given values"
+        _set: cms_post_set_input,
+        pk_columns: cms_post_pk_columns_input!
+    ): cms_post
+}
+
+"query root"
+type query_root {
+    "fetch data from the table: \"cms.post\""
+    cms_post(
+        "distinct select on columns"
+        distinct_on: [cms_post_select_column!],
+        "limit the number of rows returned"
+        limit: Int,
+        "skip the first n rows. Use only with order_by"
+        offset: Int,
+        "sort the rows by one or more columns"
+        order_by: [cms_post_order_by!],
+        "filter the rows returned"
+        where: cms_post_bool_exp
+    ): [cms_post!]!
+    "fetch aggregated fields from the table: \"cms.post\""
+    cms_post_aggregate(
+        "distinct select on columns"
+        distinct_on: [cms_post_select_column!],
+        "limit the number of rows returned"
+        limit: Int,
+        "skip the first n rows. Use only with order_by"
+        offset: Int,
+        "sort the rows by one or more columns"
+        order_by: [cms_post_order_by!],
+        "filter the rows returned"
+        where: cms_post_bool_exp
+    ): cms_post_aggregate!
+    "fetch data from the table: \"cms.post\" using primary key columns"
+    cms_post_by_pk(id: uuid!): cms_post
+    user(id: String!): User
+    users(name: String): [User]!
+}
+
+"subscription root"
+type subscription_root {
+    "fetch data from the table: \"cms.post\""
+    cms_post(
+        "distinct select on columns"
+        distinct_on: [cms_post_select_column!],
+        "limit the number of rows returned"
+        limit: Int,
+        "skip the first n rows. Use only with order_by"
+        offset: Int,
+        "sort the rows by one or more columns"
+        order_by: [cms_post_order_by!],
+        "filter the rows returned"
+        where: cms_post_bool_exp
+    ): [cms_post!]!
+    "fetch aggregated fields from the table: \"cms.post\""
+    cms_post_aggregate(
+        "distinct select on columns"
+        distinct_on: [cms_post_select_column!],
+        "limit the number of rows returned"
+        limit: Int,
+        "skip the first n rows. Use only with order_by"
+        offset: Int,
+        "sort the rows by one or more columns"
+        order_by: [cms_post_order_by!],
+        "filter the rows returned"
+        where: cms_post_bool_exp
+    ): cms_post_aggregate!
+    "fetch data from the table: \"cms.post\" using primary key columns"
+    cms_post_by_pk(id: uuid!): cms_post
+}
+
+enum CacheControlScope {
+    PRIVATE
+    PUBLIC
+}
+
+"unique or primary key constraints on table \"cms.post\""
+enum cms_post_constraint {
+    "unique or primary key constraint"
+    post_pkey
+}
+
+"select columns of table \"cms.post\""
+enum cms_post_select_column {
+    "column name"
+    author_id
+    "column name"
+    content
+    "column name"
+    created_at
+    "column name"
+    description
+    "column name"
+    id
+    "column name"
+    image
+    "column name"
+    published_at
+    "column name"
+    title
+    "column name"
+    updated_at
+}
+
+"update columns of table \"cms.post\""
+enum cms_post_update_column {
+    "column name"
+    author_id
+    "column name"
+    content
+    "column name"
+    created_at
+    "column name"
+    description
+    "column name"
+    id
+    "column name"
+    image
+    "column name"
+    published_at
+    "column name"
+    title
+    "column name"
+    updated_at
+}
+
+"column ordering options"
+enum order_by {
+    "in the ascending order, nulls last"
+    asc
+    "in the ascending order, nulls first"
+    asc_nulls_first
+    "in the ascending order, nulls last"
+    asc_nulls_last
+    "in the descending order, nulls first"
+    desc
+    "in the descending order, nulls first"
+    desc_nulls_first
+    "in the descending order, nulls last"
+    desc_nulls_last
+}
+
+"expression to compare columns of type String. All fields are combined with logical 'AND'."
+input String_comparison_exp {
+    _eq: String
+    _gt: String
+    _gte: String
+    _ilike: String
+    _in: [String!]
+    _is_null: Boolean
+    _like: String
+    _lt: String
+    _lte: String
+    _neq: String
+    _nilike: String
+    _nin: [String!]
+    _nlike: String
+    _nsimilar: String
+    _similar: String
+}
+
+"order by aggregate values of table \"cms.post\""
+input cms_post_aggregate_order_by {
+    count: order_by
+    max: cms_post_max_order_by
+    min: cms_post_min_order_by
+}
+
+"append existing jsonb value of filtered columns with new jsonb value"
+input cms_post_append_input {
+    content: jsonb
+    description: jsonb
+}
+
+"input type for inserting array relation for remote table \"cms.post\""
+input cms_post_arr_rel_insert_input {
+    data: [cms_post_insert_input!]!
+    on_conflict: cms_post_on_conflict
+}
+
+"Boolean expression to filter rows from the table \"cms.post\". All fields are combined with a logical 'AND'."
+input cms_post_bool_exp {
+    _and: [cms_post_bool_exp]
+    _not: cms_post_bool_exp
+    _or: [cms_post_bool_exp]
+    author_id: String_comparison_exp
+    content: jsonb_comparison_exp
+    created_at: timestamptz_comparison_exp
+    description: jsonb_comparison_exp
+    id: uuid_comparison_exp
+    image: String_comparison_exp
+    published_at: timestamptz_comparison_exp
+    title: String_comparison_exp
+    updated_at: timestamptz_comparison_exp
+}
+
+"delete the field or element with specified path (for JSON arrays, negative integers count from the end)"
+input cms_post_delete_at_path_input {
+    content: [String]
+    description: [String]
+}
+
+"delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array"
+input cms_post_delete_elem_input {
+    content: Int
+    description: Int
+}
+
+"delete key/value pair or string element. key/value pairs are matched based on their key value"
+input cms_post_delete_key_input {
+    content: String
+    description: String
+}
+
+"input type for inserting data into table \"cms.post\""
+input cms_post_insert_input {
+    author_id: String
+    content: jsonb
+    created_at: timestamptz
+    description: jsonb
+    id: uuid
+    image: String
+    published_at: timestamptz
+    title: String
+    updated_at: timestamptz
+}
+
+"order by max() on columns of table \"cms.post\""
+input cms_post_max_order_by {
+    author_id: order_by
+    created_at: order_by
+    id: order_by
+    image: order_by
+    published_at: order_by
+    title: order_by
+    updated_at: order_by
+}
+
+"order by min() on columns of table \"cms.post\""
+input cms_post_min_order_by {
+    author_id: order_by
+    created_at: order_by
+    id: order_by
+    image: order_by
+    published_at: order_by
+    title: order_by
+    updated_at: order_by
+}
+
+"input type for inserting object relation for remote table \"cms.post\""
+input cms_post_obj_rel_insert_input {
+    data: cms_post_insert_input!
+    on_conflict: cms_post_on_conflict
+}
+
+"on conflict condition type for table \"cms.post\""
+input cms_post_on_conflict {
+    constraint: cms_post_constraint!
+    update_columns: [cms_post_update_column!]!
+    where: cms_post_bool_exp
+}
+
+"ordering options when selecting data from \"cms.post\""
+input cms_post_order_by {
+    author_id: order_by
+    content: order_by
+    created_at: order_by
+    description: order_by
+    id: order_by
+    image: order_by
+    published_at: order_by
+    title: order_by
+    updated_at: order_by
+}
+
+"primary key columns input for table: \"cms.post\""
+input cms_post_pk_columns_input {
+    id: uuid!
+}
+
+"prepend existing jsonb value of filtered columns with new jsonb value"
+input cms_post_prepend_input {
+    content: jsonb
+    description: jsonb
+}
+
+"input type for updating data in table \"cms.post\""
+input cms_post_set_input {
+    author_id: String
+    content: jsonb
+    created_at: timestamptz
+    description: jsonb
+    id: uuid
+    image: String
+    published_at: timestamptz
+    title: String
+    updated_at: timestamptz
+}
+
+"expression to compare columns of type jsonb. All fields are combined with logical 'AND'."
+input jsonb_comparison_exp {
+    "is the column contained in the given json value"
+    _contained_in: jsonb
+    "does the column contain the given json value at the top level"
+    _contains: jsonb
+    _eq: jsonb
+    _gt: jsonb
+    _gte: jsonb
+    "does the string exist as a top-level key in the column"
+    _has_key: String
+    "do all of these strings exist as top-level keys in the column"
+    _has_keys_all: [String!]
+    "do any of these strings exist as top-level keys in the column"
+    _has_keys_any: [String!]
+    _in: [jsonb!]
+    _is_null: Boolean
+    _lt: jsonb
+    _lte: jsonb
+    _neq: jsonb
+    _nin: [jsonb!]
+}
+
+"expression to compare columns of type timestamptz. All fields are combined with logical 'AND'."
+input timestamptz_comparison_exp {
+    _eq: timestamptz
+    _gt: timestamptz
+    _gte: timestamptz
+    _in: [timestamptz!]
+    _is_null: Boolean
+    _lt: timestamptz
+    _lte: timestamptz
+    _neq: timestamptz
+    _nin: [timestamptz!]
+}
+
+"expression to compare columns of type uuid. All fields are combined with logical 'AND'."
+input uuid_comparison_exp {
+    _eq: uuid
+    _gt: uuid
+    _gte: uuid
+    _in: [uuid!]
+    _is_null: Boolean
+    _lt: uuid
+    _lte: uuid
+    _neq: uuid
+    _nin: [uuid!]
+}
+
+
+scalar DateTime
+
+"The `Upload` scalar type represents a file upload."
+scalar Upload
+
+scalar jsonb
+
+scalar timestamptz
+
+scalar uuid

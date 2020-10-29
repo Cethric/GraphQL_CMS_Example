@@ -1,0 +1,25 @@
+/*
+Mixin Definitions
+ */
+
+@mixin theme-transition() {
+  transition: background-color 500ms linear, background 500ms linear, color 300ms ease-in-out 0ms;
+}
+
+@mixin bg-transition() {
+  @include theme-transition();
+  pre {
+    & > * {
+      @include theme-transition();
+    }
+    code {
+      & > * {
+        @include theme-transition();
+      }
+    }
+  }
+}
+
+@mixin apply-font() {
+
+}

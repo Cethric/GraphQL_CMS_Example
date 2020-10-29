@@ -1,0 +1,31 @@
+/*
+Config Definitions
+ */
+
+@use "font";
+
+$spacer: 1rem;
+$enable-rounded: true;
+$enable-shadows: true;
+$enable-gradients: false;
+$enable-transitions: true;
+$enable-prefers-reduced-motion-media-query: true;
+$enable-hover-media-query: false;
+$enable-grid-classes: true;
+$enable-caret: true;
+$enable-pointer-cursor-for-buttons: true;
+$enable-print-styles: false;
+$enable-responsive-font-sizes: true;
+$enable-validation-icons: true;
+$enable-deprecation-messages: true;
+$bv-enable-table-stacked: true;
+$bv-enable-table-sticky: true;
+$bv-enable-tooltip-variants: true;
+$bv-enable-popover-variants: true;
+
+
+$font-size-base: 1.1rem;
+$font-family-base: font.$didact-gothic;
+$font-family-sans-serif: font.$didact-gothic;
+$headings-font-family: font.$raleway;
+$headings-font-weight: 500;

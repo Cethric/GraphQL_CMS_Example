@@ -1,0 +1,27 @@
+{
+  "tabWidth": 4,
+  "useTabs": false,
+  "semi": true,
+  "singleQuote": true,
+  "quoteProps": "as-needed",
+  "jsxSingleQuote": false,
+  "trailingComma": "es5",
+  "bracketSpacing": true,
+  "jsxBracketSameLine": false,
+  "arrowParens": "always",
+  "parser": "babel",
+  "insertPragma": true,
+  "endOfLine": "lf",
+  "embeddedLanguageFormatting": "auto",
+  "overrides": [
+    {
+      "files": "*.vue",
+      "options": {
+        "parser": "vue",
+        "tabWidth": 2,
+        "vueIndentScriptAndStyle": true,
+        "insertPragma": false
+      }
+    }
+  ]
+}

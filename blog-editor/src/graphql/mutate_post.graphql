@@ -1,0 +1,27 @@
+mutation(
+    $id: uuid!
+    $title: String!
+    $image: String!
+    $description: jsonb
+    $content: jsonb
+) {
+    update_cms_post_by_pk(
+        pk_columns: { id: $id }
+        _set: {
+            title: $title
+            description: $description
+            content: $content
+            image: $image
+        }
+    ) {
+        id
+        created_at
+        updated_at
+        title
+        description
+        content
+        published_at
+        image
+        permalink
+    }
+}

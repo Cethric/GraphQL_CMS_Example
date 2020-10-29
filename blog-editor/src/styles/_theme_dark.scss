@@ -1,0 +1,22 @@
+/*
+Dark Theme Imports
+ */
+
+@use 'mixins';
+
+.theme-dark {
+  @include mixins.bg-transition();
+  @import "config";
+  @import "theme/darkly";
+  @import 'custom-bootstrap';
+  @import '~highlight.js/scss/solarized-dark';
+  background-color: $body-bg;
+  color: $body-color;
+  font-family: $font-family-base !important;
+
+  .form-control {
+    border-color: $gray-100;
+    background-color: $body-bg !important;
+    color: $body-color !important;
+  }
+}

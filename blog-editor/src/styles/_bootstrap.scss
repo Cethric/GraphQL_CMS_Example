@@ -1,0 +1,8 @@
+/*
+Bootstrap Imports
+ */
+
+@use 'custom-bootstrap';
+
+$body-color: custom-bootstrap.$body-color;
+$body-bg: custom-bootstrap.$body-bg;

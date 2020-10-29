@@ -1,0 +1,5 @@
+- name: Auth0
+  definition:
+    url_from_env: AUTH0_MANAGEMENT_ENDPOINT
+    timeout_seconds: 60
+    forward_client_headers: true

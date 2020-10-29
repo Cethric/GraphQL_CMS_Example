@@ -1,0 +1,43 @@
+/*!
+ * Bootstrap v4.5.3 (https://getbootstrap.com/)
+ * Copyright 2011-2020 The Bootstrap Authors
+ * Copyright 2011-2020 Twitter, Inc.
+ * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
+ */
+@use '../mixins';
+
+@import 'bs-variables';
+@import 'bs-root';
+@import 'bs-vue';
+
+
+@each $color, $value in $theme-colors {
+  $parent: '.bg-#{$color}';
+  #{$parent} {
+    @include mixins.bg-transition();
+  }
+}
+
+@if $enable-gradients {
+  @each $color, $value in $theme-colors {
+    $parent: '.bg-gradient-#{$color}';
+    #{$parent} {
+      @include mixins.bg-transition();
+    }
+  }
+}
+
+.bg-white {
+  @include mixins.bg-transition();
+}
+
+.bg-transparent {
+  @include mixins.bg-transition();
+}
+
+$indent-levels: 0, 1, 2, 3, 4, 5, 6;
+@each $level in $indent-levels {
+  .indent-#{$level} {
+    padding-left: 0.6rem * $level;
+  }
+}

@@ -1,0 +1,21 @@
+/*
+Light Theme Imports
+ */
+
+@use 'mixins';
+
+.theme-light {
+  @include mixins.bg-transition();
+  @import "config";
+  @import "theme/flatly";
+  @import 'custom-bootstrap';
+  @import '~highlight.js/scss/solarized-light';
+  background-color: $body-bg;
+  color: $body-color;
+  font-family: $font-family-base !important;
+
+  .form-control {
+    background-color: $body-bg !important;
+    color: $body-color !important;
+  }
+}
