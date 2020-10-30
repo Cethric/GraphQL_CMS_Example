@@ -50,6 +50,62 @@ module.exports = {
             ],
         },
         plugins: [new LodashModuleReplacementPlugin({})],
+        optimization: {
+            minimize: true,
+            splitChunks: {
+                chunks: 'all',
+                // maxSize: 1024 * 512,
+                // cacheGroups: {
+                //     corejs: {
+                //         test: /[\\/]node_modules[\\/](core-js)[\\/]/giu,
+                //         chunks: () => true,
+                //         name: 'vendor-core-js',
+                //     },
+                //     vue: {
+                //         test: /[\\/]node_modules[\\/](vue|vue-router|vue-class-component)[\\/]/giu,
+                //         chunks: () => true,
+                //         name: 'vendor-vue',
+                //     },
+                //     apollo: {
+                //         test: /[\\/]node_modules[\\/](vue-apollo|apollo|apollo-.*|@apollo|graphql)[\\/]/giu,
+                //         chunks: () => true,
+                //         name: 'vendor-apollo',
+                //     },
+                //     bootstrap: {
+                //         test: /[\\/]node_modules[\\/](bootstrap|bootstrap-vue)[\\/]/giu,
+                //         chunks: () => true,
+                //         name: 'vendor-bootstrap',
+                //     },
+                //     uppy: {
+                //         test: /[\\/]node_modules[\\/](@uppy|classnames|polyglot.js|cropperjs)[\\/]/giu,
+                //         chunks: () => true,
+                //         name: 'vendor-uppy',
+                //     },
+                //     hljs: {
+                //         test: /[\\/]node_modules[\\/](highlight.js)[\\/]/giu,
+                //         chunks: () => true,
+                //         name: 'vendor-hljs',
+                //     },
+                //     lodash: {
+                //         test: /[\\/]node_modules[\\/](lodash)[\\/]/giu,
+                //         chunks: () => true,
+                //         name: 'vendor-lodash',
+                //     },
+                //     vendors: {
+                //         name: 'vendor-all',
+                //         chunks: (chunk) => {
+                //             return !/vue|vue-router|vue-apollo|apollo|apollo-.*|@apollo|graphql|bootstrap|bootstrap-vue|@uppy|classnames|polyglot.js|cropperjs|highlight.js|lodash/.test(
+                //                 chunk.name
+                //             );
+                //         },
+                //     },
+                // },
+            },
+            // mergeDuplicateChunks: true,
+            runtimeChunk: true,
+            concatenateModules: true,
+            usedExports: true,
+        },
     },
     chainWebpack: (config) => {
         config.module

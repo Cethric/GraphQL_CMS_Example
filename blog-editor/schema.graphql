@@ -25,22 +25,57 @@ type User {
 type cms_post {
     "Remote relationship field"
     author: User
+    "the Auth0 user id of the user that created this post"
     author_id: String!
+    "the contents of the post"
     content(
         "JSON select path"
         path: String
     ): jsonb!
+    "when the was this post created at"
     created_at: timestamptz!
+    "briefly describe what this post is about"
     description(
         "JSON select path"
         path: String
-    ): jsonb
+    ): jsonb!
+    "a unique id that represents a single post"
     id: uuid!
+    "A hero image to use on this post"
     image: String!
     "A computed field, executes function \"cms.get_permalink\""
     permalink: String
+    "An array relationship"
+    post_histories(
+        "distinct select on columns"
+        distinct_on: [cms_post_history_select_column!],
+        "limit the number of rows returned"
+        limit: Int,
+        "skip the first n rows. Use only with order_by"
+        offset: Int,
+        "sort the rows by one or more columns"
+        order_by: [cms_post_history_order_by!],
+        "filter the rows returned"
+        where: cms_post_history_bool_exp
+    ): [cms_post_history!]!
+    "An aggregated array relationship"
+    post_histories_aggregate(
+        "distinct select on columns"
+        distinct_on: [cms_post_history_select_column!],
+        "limit the number of rows returned"
+        limit: Int,
+        "skip the first n rows. Use only with order_by"
+        offset: Int,
+        "sort the rows by one or more columns"
+        order_by: [cms_post_history_order_by!],
+        "filter the rows returned"
+        where: cms_post_history_bool_exp
+    ): cms_post_history_aggregate!
+    "when was this post first published"
     published_at: timestamptz
+    "what is the title of this post"
     title: String!
+    "when was the last time this post was updated"
     updated_at: timestamptz!
 }
 
@@ -55,6 +90,111 @@ type cms_post_aggregate_fields {
     count(columns: [cms_post_select_column!], distinct: Boolean): Int
     max: cms_post_max_fields
     min: cms_post_min_fields
+}
+
+"columns and relationships of \"cms.post_history\""
+type cms_post_history {
+    content(
+        "JSON select path"
+        path: String
+    ): jsonb!
+    description(
+        "JSON select path"
+        path: String
+    ): jsonb!
+    id: uuid!
+    "An object relationship"
+    post: cms_post!
+    post_id: uuid!
+    title: String!
+}
+
+"aggregated selection of \"cms.post_history\""
+type cms_post_history_aggregate {
+    aggregate: cms_post_history_aggregate_fields
+    nodes: [cms_post_history!]!
+}
+
+"aggregate fields of \"cms.post_history\""
+type cms_post_history_aggregate_fields {
+    count(columns: [cms_post_history_select_column!], distinct: Boolean): Int
+    max: cms_post_history_max_fields
+    min: cms_post_history_min_fields
+}
+
+"aggregate max on columns"
+type cms_post_history_max_fields {
+    id: uuid
+    post_id: uuid
+    title: String
+}
+
+"aggregate min on columns"
+type cms_post_history_min_fields {
+    id: uuid
+    post_id: uuid
+    title: String
+}
+
+"response of any mutation on the table \"cms.post_history\""
+type cms_post_history_mutation_response {
+    "number of affected rows by the mutation"
+    affected_rows: Int!
+    "data of the affected rows by the mutation"
+    returning: [cms_post_history!]!
+}
+
+"columns and relationships of \"cms.post_history_view\""
+type cms_post_history_view {
+    id: uuid
+    new_content(
+        "JSON select path"
+        path: String
+    ): jsonb
+    new_description(
+        "JSON select path"
+        path: String
+    ): jsonb
+    new_title: String
+    old_content(
+        "JSON select path"
+        path: String
+    ): jsonb
+    old_description(
+        "JSON select path"
+        path: String
+    ): jsonb
+    old_title: String
+    updated_at: timestamptz
+}
+
+"aggregated selection of \"cms.post_history_view\""
+type cms_post_history_view_aggregate {
+    aggregate: cms_post_history_view_aggregate_fields
+    nodes: [cms_post_history_view!]!
+}
+
+"aggregate fields of \"cms.post_history_view\""
+type cms_post_history_view_aggregate_fields {
+    count(columns: [cms_post_history_view_select_column!], distinct: Boolean): Int
+    max: cms_post_history_view_max_fields
+    min: cms_post_history_view_min_fields
+}
+
+"aggregate max on columns"
+type cms_post_history_view_max_fields {
+    id: uuid
+    new_title: String
+    old_title: String
+    updated_at: timestamptz
+}
+
+"aggregate min on columns"
+type cms_post_history_view_min_fields {
+    id: uuid
+    new_title: String
+    old_title: String
+    updated_at: timestamptz
 }
 
 "aggregate max on columns"
@@ -95,7 +235,17 @@ type mutation_root {
         where: cms_post_bool_exp!
     ): cms_post_mutation_response
     "delete single row from the table: \"cms.post\""
-    delete_cms_post_by_pk(id: uuid!): cms_post
+    delete_cms_post_by_pk(
+        "a unique id that represents a single post"
+        id: uuid!
+    ): cms_post
+    "delete data from the table: \"cms.post_history\""
+    delete_cms_post_history(
+        "filter the rows which have to be deleted"
+        where: cms_post_history_bool_exp!
+    ): cms_post_history_mutation_response
+    "delete single row from the table: \"cms.post_history\""
+    delete_cms_post_history_by_pk(id: uuid!): cms_post_history
     "insert data into the table: \"cms.post\""
     insert_cms_post(
         "the rows to be inserted"
@@ -103,6 +253,20 @@ type mutation_root {
         "on conflict condition"
         on_conflict: cms_post_on_conflict
     ): cms_post_mutation_response
+    "insert data into the table: \"cms.post_history\""
+    insert_cms_post_history(
+        "the rows to be inserted"
+        objects: [cms_post_history_insert_input!]!,
+        "on conflict condition"
+        on_conflict: cms_post_history_on_conflict
+    ): cms_post_history_mutation_response
+    "insert a single row into the table: \"cms.post_history\""
+    insert_cms_post_history_one(
+        "the row to be inserted"
+        object: cms_post_history_insert_input!,
+        "on conflict condition"
+        on_conflict: cms_post_history_on_conflict
+    ): cms_post_history
     "insert a single row into the table: \"cms.post\""
     insert_cms_post_one(
         "the row to be inserted"
@@ -143,6 +307,39 @@ type mutation_root {
         _set: cms_post_set_input,
         pk_columns: cms_post_pk_columns_input!
     ): cms_post
+    "update data of the table: \"cms.post_history\""
+    update_cms_post_history(
+        "append existing jsonb value of filtered columns with new jsonb value"
+        _append: cms_post_history_append_input,
+        "delete the field or element with specified path (for JSON arrays, negative integers count from the end)"
+        _delete_at_path: cms_post_history_delete_at_path_input,
+        "delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array"
+        _delete_elem: cms_post_history_delete_elem_input,
+        "delete key/value pair or string element. key/value pairs are matched based on their key value"
+        _delete_key: cms_post_history_delete_key_input,
+        "prepend existing jsonb value of filtered columns with new jsonb value"
+        _prepend: cms_post_history_prepend_input,
+        "sets the columns of the filtered rows to the given values"
+        _set: cms_post_history_set_input,
+        "filter the rows which have to be updated"
+        where: cms_post_history_bool_exp!
+    ): cms_post_history_mutation_response
+    "update single row of the table: \"cms.post_history\""
+    update_cms_post_history_by_pk(
+        "append existing jsonb value of filtered columns with new jsonb value"
+        _append: cms_post_history_append_input,
+        "delete the field or element with specified path (for JSON arrays, negative integers count from the end)"
+        _delete_at_path: cms_post_history_delete_at_path_input,
+        "delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array"
+        _delete_elem: cms_post_history_delete_elem_input,
+        "delete key/value pair or string element. key/value pairs are matched based on their key value"
+        _delete_key: cms_post_history_delete_key_input,
+        "prepend existing jsonb value of filtered columns with new jsonb value"
+        _prepend: cms_post_history_prepend_input,
+        "sets the columns of the filtered rows to the given values"
+        _set: cms_post_history_set_input,
+        pk_columns: cms_post_history_pk_columns_input!
+    ): cms_post_history
 }
 
 "query root"
@@ -174,7 +371,64 @@ type query_root {
         where: cms_post_bool_exp
     ): cms_post_aggregate!
     "fetch data from the table: \"cms.post\" using primary key columns"
-    cms_post_by_pk(id: uuid!): cms_post
+    cms_post_by_pk(
+        "a unique id that represents a single post"
+        id: uuid!
+    ): cms_post
+    "fetch data from the table: \"cms.post_history\""
+    cms_post_history(
+        "distinct select on columns"
+        distinct_on: [cms_post_history_select_column!],
+        "limit the number of rows returned"
+        limit: Int,
+        "skip the first n rows. Use only with order_by"
+        offset: Int,
+        "sort the rows by one or more columns"
+        order_by: [cms_post_history_order_by!],
+        "filter the rows returned"
+        where: cms_post_history_bool_exp
+    ): [cms_post_history!]!
+    "fetch aggregated fields from the table: \"cms.post_history\""
+    cms_post_history_aggregate(
+        "distinct select on columns"
+        distinct_on: [cms_post_history_select_column!],
+        "limit the number of rows returned"
+        limit: Int,
+        "skip the first n rows. Use only with order_by"
+        offset: Int,
+        "sort the rows by one or more columns"
+        order_by: [cms_post_history_order_by!],
+        "filter the rows returned"
+        where: cms_post_history_bool_exp
+    ): cms_post_history_aggregate!
+    "fetch data from the table: \"cms.post_history\" using primary key columns"
+    cms_post_history_by_pk(id: uuid!): cms_post_history
+    "fetch data from the table: \"cms.post_history_view\""
+    cms_post_history_view(
+        "distinct select on columns"
+        distinct_on: [cms_post_history_view_select_column!],
+        "limit the number of rows returned"
+        limit: Int,
+        "skip the first n rows. Use only with order_by"
+        offset: Int,
+        "sort the rows by one or more columns"
+        order_by: [cms_post_history_view_order_by!],
+        "filter the rows returned"
+        where: cms_post_history_view_bool_exp
+    ): [cms_post_history_view!]!
+    "fetch aggregated fields from the table: \"cms.post_history_view\""
+    cms_post_history_view_aggregate(
+        "distinct select on columns"
+        distinct_on: [cms_post_history_view_select_column!],
+        "limit the number of rows returned"
+        limit: Int,
+        "skip the first n rows. Use only with order_by"
+        offset: Int,
+        "sort the rows by one or more columns"
+        order_by: [cms_post_history_view_order_by!],
+        "filter the rows returned"
+        where: cms_post_history_view_bool_exp
+    ): cms_post_history_view_aggregate!
     user(id: String!): User
     users(name: String): [User]!
 }
@@ -208,7 +462,64 @@ type subscription_root {
         where: cms_post_bool_exp
     ): cms_post_aggregate!
     "fetch data from the table: \"cms.post\" using primary key columns"
-    cms_post_by_pk(id: uuid!): cms_post
+    cms_post_by_pk(
+        "a unique id that represents a single post"
+        id: uuid!
+    ): cms_post
+    "fetch data from the table: \"cms.post_history\""
+    cms_post_history(
+        "distinct select on columns"
+        distinct_on: [cms_post_history_select_column!],
+        "limit the number of rows returned"
+        limit: Int,
+        "skip the first n rows. Use only with order_by"
+        offset: Int,
+        "sort the rows by one or more columns"
+        order_by: [cms_post_history_order_by!],
+        "filter the rows returned"
+        where: cms_post_history_bool_exp
+    ): [cms_post_history!]!
+    "fetch aggregated fields from the table: \"cms.post_history\""
+    cms_post_history_aggregate(
+        "distinct select on columns"
+        distinct_on: [cms_post_history_select_column!],
+        "limit the number of rows returned"
+        limit: Int,
+        "skip the first n rows. Use only with order_by"
+        offset: Int,
+        "sort the rows by one or more columns"
+        order_by: [cms_post_history_order_by!],
+        "filter the rows returned"
+        where: cms_post_history_bool_exp
+    ): cms_post_history_aggregate!
+    "fetch data from the table: \"cms.post_history\" using primary key columns"
+    cms_post_history_by_pk(id: uuid!): cms_post_history
+    "fetch data from the table: \"cms.post_history_view\""
+    cms_post_history_view(
+        "distinct select on columns"
+        distinct_on: [cms_post_history_view_select_column!],
+        "limit the number of rows returned"
+        limit: Int,
+        "skip the first n rows. Use only with order_by"
+        offset: Int,
+        "sort the rows by one or more columns"
+        order_by: [cms_post_history_view_order_by!],
+        "filter the rows returned"
+        where: cms_post_history_view_bool_exp
+    ): [cms_post_history_view!]!
+    "fetch aggregated fields from the table: \"cms.post_history_view\""
+    cms_post_history_view_aggregate(
+        "distinct select on columns"
+        distinct_on: [cms_post_history_view_select_column!],
+        "limit the number of rows returned"
+        limit: Int,
+        "skip the first n rows. Use only with order_by"
+        offset: Int,
+        "sort the rows by one or more columns"
+        order_by: [cms_post_history_view_order_by!],
+        "filter the rows returned"
+        where: cms_post_history_view_bool_exp
+    ): cms_post_history_view_aggregate!
 }
 
 enum CacheControlScope {
@@ -220,6 +531,60 @@ enum CacheControlScope {
 enum cms_post_constraint {
     "unique or primary key constraint"
     post_pkey
+}
+
+"unique or primary key constraints on table \"cms.post_history\""
+enum cms_post_history_constraint {
+    "unique or primary key constraint"
+    post_history_pkey
+}
+
+"select columns of table \"cms.post_history\""
+enum cms_post_history_select_column {
+    "column name"
+    content
+    "column name"
+    description
+    "column name"
+    id
+    "column name"
+    post_id
+    "column name"
+    title
+}
+
+"update columns of table \"cms.post_history\""
+enum cms_post_history_update_column {
+    "column name"
+    content
+    "column name"
+    description
+    "column name"
+    id
+    "column name"
+    post_id
+    "column name"
+    title
+}
+
+"select columns of table \"cms.post_history_view\""
+enum cms_post_history_view_select_column {
+    "column name"
+    id
+    "column name"
+    new_content
+    "column name"
+    new_description
+    "column name"
+    new_title
+    "column name"
+    old_content
+    "column name"
+    old_description
+    "column name"
+    old_title
+    "column name"
+    updated_at
 }
 
 "select columns of table \"cms.post\""
@@ -331,6 +696,7 @@ input cms_post_bool_exp {
     description: jsonb_comparison_exp
     id: uuid_comparison_exp
     image: String_comparison_exp
+    post_histories: cms_post_history_bool_exp
     published_at: timestamptz_comparison_exp
     title: String_comparison_exp
     updated_at: timestamptz_comparison_exp
@@ -354,6 +720,213 @@ input cms_post_delete_key_input {
     description: String
 }
 
+"order by aggregate values of table \"cms.post_history\""
+input cms_post_history_aggregate_order_by {
+    count: order_by
+    max: cms_post_history_max_order_by
+    min: cms_post_history_min_order_by
+}
+
+"append existing jsonb value of filtered columns with new jsonb value"
+input cms_post_history_append_input {
+    content: jsonb
+    description: jsonb
+}
+
+"input type for inserting array relation for remote table \"cms.post_history\""
+input cms_post_history_arr_rel_insert_input {
+    data: [cms_post_history_insert_input!]!
+    on_conflict: cms_post_history_on_conflict
+}
+
+"Boolean expression to filter rows from the table \"cms.post_history\". All fields are combined with a logical 'AND'."
+input cms_post_history_bool_exp {
+    _and: [cms_post_history_bool_exp]
+    _not: cms_post_history_bool_exp
+    _or: [cms_post_history_bool_exp]
+    content: jsonb_comparison_exp
+    description: jsonb_comparison_exp
+    id: uuid_comparison_exp
+    post: cms_post_bool_exp
+    post_id: uuid_comparison_exp
+    title: String_comparison_exp
+}
+
+"delete the field or element with specified path (for JSON arrays, negative integers count from the end)"
+input cms_post_history_delete_at_path_input {
+    content: [String]
+    description: [String]
+}
+
+"delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array"
+input cms_post_history_delete_elem_input {
+    content: Int
+    description: Int
+}
+
+"delete key/value pair or string element. key/value pairs are matched based on their key value"
+input cms_post_history_delete_key_input {
+    content: String
+    description: String
+}
+
+"input type for inserting data into table \"cms.post_history\""
+input cms_post_history_insert_input {
+    content: jsonb
+    description: jsonb
+    id: uuid
+    post: cms_post_obj_rel_insert_input
+    post_id: uuid
+    title: String
+}
+
+"order by max() on columns of table \"cms.post_history\""
+input cms_post_history_max_order_by {
+    id: order_by
+    post_id: order_by
+    title: order_by
+}
+
+"order by min() on columns of table \"cms.post_history\""
+input cms_post_history_min_order_by {
+    id: order_by
+    post_id: order_by
+    title: order_by
+}
+
+"input type for inserting object relation for remote table \"cms.post_history\""
+input cms_post_history_obj_rel_insert_input {
+    data: cms_post_history_insert_input!
+    on_conflict: cms_post_history_on_conflict
+}
+
+"on conflict condition type for table \"cms.post_history\""
+input cms_post_history_on_conflict {
+    constraint: cms_post_history_constraint!
+    update_columns: [cms_post_history_update_column!]!
+    where: cms_post_history_bool_exp
+}
+
+"ordering options when selecting data from \"cms.post_history\""
+input cms_post_history_order_by {
+    content: order_by
+    description: order_by
+    id: order_by
+    post: cms_post_order_by
+    post_id: order_by
+    title: order_by
+}
+
+"primary key columns input for table: \"cms.post_history\""
+input cms_post_history_pk_columns_input {
+    id: uuid!
+}
+
+"prepend existing jsonb value of filtered columns with new jsonb value"
+input cms_post_history_prepend_input {
+    content: jsonb
+    description: jsonb
+}
+
+"input type for updating data in table \"cms.post_history\""
+input cms_post_history_set_input {
+    content: jsonb
+    description: jsonb
+    id: uuid
+    post_id: uuid
+    title: String
+}
+
+"order by aggregate values of table \"cms.post_history_view\""
+input cms_post_history_view_aggregate_order_by {
+    count: order_by
+    max: cms_post_history_view_max_order_by
+    min: cms_post_history_view_min_order_by
+}
+
+"append existing jsonb value of filtered columns with new jsonb value"
+input cms_post_history_view_append_input {
+    new_content: jsonb
+    new_description: jsonb
+    old_content: jsonb
+    old_description: jsonb
+}
+
+"Boolean expression to filter rows from the table \"cms.post_history_view\". All fields are combined with a logical 'AND'."
+input cms_post_history_view_bool_exp {
+    _and: [cms_post_history_view_bool_exp]
+    _not: cms_post_history_view_bool_exp
+    _or: [cms_post_history_view_bool_exp]
+    id: uuid_comparison_exp
+    new_content: jsonb_comparison_exp
+    new_description: jsonb_comparison_exp
+    new_title: String_comparison_exp
+    old_content: jsonb_comparison_exp
+    old_description: jsonb_comparison_exp
+    old_title: String_comparison_exp
+    updated_at: timestamptz_comparison_exp
+}
+
+"delete the field or element with specified path (for JSON arrays, negative integers count from the end)"
+input cms_post_history_view_delete_at_path_input {
+    new_content: [String]
+    new_description: [String]
+    old_content: [String]
+    old_description: [String]
+}
+
+"delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array"
+input cms_post_history_view_delete_elem_input {
+    new_content: Int
+    new_description: Int
+    old_content: Int
+    old_description: Int
+}
+
+"delete key/value pair or string element. key/value pairs are matched based on their key value"
+input cms_post_history_view_delete_key_input {
+    new_content: String
+    new_description: String
+    old_content: String
+    old_description: String
+}
+
+"order by max() on columns of table \"cms.post_history_view\""
+input cms_post_history_view_max_order_by {
+    id: order_by
+    new_title: order_by
+    old_title: order_by
+    updated_at: order_by
+}
+
+"order by min() on columns of table \"cms.post_history_view\""
+input cms_post_history_view_min_order_by {
+    id: order_by
+    new_title: order_by
+    old_title: order_by
+    updated_at: order_by
+}
+
+"ordering options when selecting data from \"cms.post_history_view\""
+input cms_post_history_view_order_by {
+    id: order_by
+    new_content: order_by
+    new_description: order_by
+    new_title: order_by
+    old_content: order_by
+    old_description: order_by
+    old_title: order_by
+    updated_at: order_by
+}
+
+"prepend existing jsonb value of filtered columns with new jsonb value"
+input cms_post_history_view_prepend_input {
+    new_content: jsonb
+    new_description: jsonb
+    old_content: jsonb
+    old_description: jsonb
+}
+
 "input type for inserting data into table \"cms.post\""
 input cms_post_insert_input {
     author_id: String
@@ -362,6 +935,7 @@ input cms_post_insert_input {
     description: jsonb
     id: uuid
     image: String
+    post_histories: cms_post_history_arr_rel_insert_input
     published_at: timestamptz
     title: String
     updated_at: timestamptz
@@ -410,6 +984,7 @@ input cms_post_order_by {
     description: order_by
     id: order_by
     image: order_by
+    post_histories_aggregate: cms_post_history_aggregate_order_by
     published_at: order_by
     title: order_by
     updated_at: order_by
@@ -417,6 +992,7 @@ input cms_post_order_by {
 
 "primary key columns input for table: \"cms.post\""
 input cms_post_pk_columns_input {
+    "a unique id that represents a single post"
     id: uuid!
 }
 
@@ -490,9 +1066,6 @@ input uuid_comparison_exp {
 
 
 scalar DateTime
-
-"The `Upload` scalar type represents a file upload."
-scalar Upload
 
 scalar jsonb
 

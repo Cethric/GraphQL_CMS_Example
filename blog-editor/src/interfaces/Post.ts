@@ -1,6 +1,17 @@
 /** @format */
 import { ContentElement } from '@/interfaces/ContentElement';
 
+export interface PostHistory {
+    title: string;
+    content: ContentElement[];
+    description: ContentElement[];
+}
+
+export interface PostAuthor {
+    name: string;
+    picture: string;
+}
+
 export interface Post {
     id: string;
     created_at: string;
@@ -11,8 +22,6 @@ export interface Post {
     published_at: string | null;
     image: string;
     permalink: string;
-    author?: {
-        name: string,
-        picture: string,
-    };
+    author?: PostAuthor;
+    post_histories?: PostHistory[];
 }

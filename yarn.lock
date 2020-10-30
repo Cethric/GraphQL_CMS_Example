@@ -6202,6 +6202,7 @@ __metadata:
     graphql: ^15.4.0
     graphql-tag: ^2.11.0
     highlight.js: ^10.3.1
+    htmldiff.js: "https://github.com/soxhub/htmldiff.js.git"
     jquery: ^3.5.1
     lodash: ^4.17.20
     lodash-webpack-plugin: ^0.11.5
@@ -11329,6 +11330,13 @@ fsevents@~2.1.2:
   peerDependencies:
     webpack: ^1.0.0 || ^2.0.0 || ^3.0.0 || ^4.0.0
   checksum: 02dcb274a8984442cb164de8920ee0c0a840a494b65c7ff2a1c39f9b687abf668d6a3ff21b693e9f5db8f93cef411c281d74dfd7db956490d51d50d25d64e468
+  languageName: node
+  linkType: hard
+
+"htmldiff.js@https://github.com/soxhub/htmldiff.js.git":
+  version: 0.0.5
+  resolution: "htmldiff.js@https://github.com/soxhub/htmldiff.js.git#commit=60317cb454362910e63e683faf3e658c47643559"
+  checksum: 1bfa5f80eeff3f8537e6b796df113e44261f410a91bf49e6e58cda300fc6725dc4f878e2a053d17489a8bc9bb26e03c765b4fbef0e4ab2f718228a3fa7b0f563
   languageName: node
   linkType: hard
 

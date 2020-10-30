@@ -55,7 +55,7 @@
   import { Component, Prop, Vue } from 'vue-property-decorator';
   import { Location } from 'vue-router';
   import { PostBrief } from '@/interfaces/PostBrief';
-  import { ContentRenderer } from '@/components/ContentRenderer';
+  import { ContentRenderer } from '@/components/render/ContentRenderer';
 
   @Component({
     components: {

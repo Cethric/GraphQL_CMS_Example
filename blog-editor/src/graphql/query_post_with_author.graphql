@@ -13,5 +13,10 @@ query($id: uuid!) {
             name
             picture
         }
+        post_histories {
+            title
+            content
+            description
+        }
     }
 }

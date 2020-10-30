@@ -8411,6 +8411,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["graphql", "npm:15.4.0"],
             ["graphql-tag", "virtual:0ba66a0048fe4686f42264ecefc677294193294847a0797c8423758c1ecb46eb98b5eb6b1edc597a9c355c7c75755cde0f2963e35627df999fcb339c3ed61c8d#npm:2.11.0"],
             ["highlight.js", "npm:10.3.1"],
+            ["htmldiff.js", "https://github.com/soxhub/htmldiff.js.git#commit=60317cb454362910e63e683faf3e658c47643559"],
             ["jquery", "npm:3.5.1"],
             ["lodash", "npm:4.17.20"],
             ["lodash-webpack-plugin", "virtual:0ba66a0048fe4686f42264ecefc677294193294847a0797c8423758c1ecb46eb98b5eb6b1edc597a9c355c7c75755cde0f2963e35627df999fcb339c3ed61c8d#npm:0.11.5"],
@@ -14317,6 +14318,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packagePeers": [
             "@types/webpack",
             "webpack"
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["htmldiff.js", [
+        ["https://github.com/soxhub/htmldiff.js.git#commit=60317cb454362910e63e683faf3e658c47643559", {
+          "packageLocation": "./.yarn/cache/htmldiff.js-https-a32fdb20dc-1bfa5f80ee.zip/node_modules/htmldiff.js/",
+          "packageDependencies": [
+            ["htmldiff.js", "https://github.com/soxhub/htmldiff.js.git#commit=60317cb454362910e63e683faf3e658c47643559"]
           ],
           "linkType": "HARD",
         }]

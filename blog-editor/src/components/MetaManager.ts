@@ -27,7 +27,7 @@ export class MetaManager extends Vue {
 
     protected updateHeadMeta(title: string, input: MetaManagerInput): void {
         document.title = title;
-        console.log(MetaManager.metaElements);
+        // console.log(MetaManager.metaElements);
         MetaManager.metaElements.forEach((e) => Object.prototype.hasOwnProperty.call(input, e.name.toLowerCase()) ? e.content = input[e.name.toLowerCase()] : undefined);
     }
 

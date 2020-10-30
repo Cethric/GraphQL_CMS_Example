@@ -191,7 +191,7 @@
   import {
     CONTENT_READY_EVENT,
     ContentRenderer,
-  } from '@/components/ContentRenderer';
+  } from '@/components/render/ContentRenderer';
   import { EditorMapperController } from '@/components/editor/EditorMapperController';
 
   @Component({

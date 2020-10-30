@@ -26,11 +26,11 @@
                 <b-col>
                   <b-jumbotron ref="headerJumbo" class="headerJumbo">
                     <template #header class="headerJumboText">
-                      {{ prepareData(data).title }}
+                      <span v-html="diffTitle(prepareData(data))" />
                     </template>
                     <template #lead class="headerJumboText">
-                      <ContentRenderer
-                        :content="prepareData(data).description"
+                      <DiffRenderer
+                        :content="diffDescription(prepareData(data))"
                         readonly
                       />
                     </template>
@@ -87,8 +87,8 @@
                 >
                   <article>
                     <section>
-                      <ContentRenderer
-                        :content="prepareData(data).content"
+                      <DiffRenderer
+                        :content="diffContent(prepareData(data))"
                         readonly
                       />
                     </section>
@@ -127,14 +127,25 @@
   }
 </style>
 
+<style lang="scss">
+  ins {
+    color: green;
+  }
+
+  del {
+    color: red;
+  }
+</style>
+
 <script lang="ts">
   import { Component, Ref } from 'vue-property-decorator';
   import { RouteKey } from '@/router/RouteKey';
   import { StoreGetter } from '@/store/StoreGetter';
-  import { ContentRenderer } from '@/components/ContentRenderer';
+  import { DiffRenderer } from '@/components/render/DiffRenderer';
   import { Post } from '@/interfaces/Post';
   import {
     BasicElement,
+    ContentElement,
     flattenElement,
     makeReferencableId,
   } from '@/interfaces/ContentElement';
@@ -142,12 +153,13 @@
   import { VBScrollspy } from 'bootstrap-vue';
   import { scrollTo } from '@/plugins/directives';
   import { MetaManager } from '@/components/MetaManager';
+  import Diffr from 'htmldiff.js';
 
   type GraphQLPostResponse = { cms_post: Post[] };
 
   @Component({
     components: {
-      ContentRenderer,
+      DiffRenderer,
       PageLoaded: {
         functional: true,
         render(
@@ -180,6 +192,37 @@
 
     makeId(title: string | number | boolean): string {
       return `#${makeReferencableId(title)}`;
+    }
+
+    diffTitle(post: Post) {
+      const newTitle = post.title;
+      if (post.post_histories && post.post_histories.length > 0) {
+        const oldTitle: string = post.post_histories[0].title;
+        return new Diffr().htmldiff(oldTitle, newTitle);
+      }
+      return newTitle;
+    }
+
+    diffDescription(post: Post) {
+      let content: ContentElement[] | undefined = undefined;
+      if (post.post_histories && post.post_histories.length > 0) {
+        content = post.post_histories[0].description;
+      }
+      return {
+        newContent: post.description,
+        oldContent: content,
+      };
+    }
+
+    diffContent(post: Post) {
+      let content: ContentElement[] | undefined = undefined;
+      if (post.post_histories && post.post_histories.length > 0) {
+        content = post.post_histories[0].content;
+      }
+      return {
+        newContent: post.content,
+        oldContent: content,
+      };
     }
 
     // eslint-disable-next-line @typescript-eslint/camelcase

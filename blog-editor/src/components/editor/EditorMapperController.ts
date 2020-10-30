@@ -7,7 +7,7 @@ export class EditorMapperController extends KeymapController {
             { length: children.length },
             (v, k) => children.item(k),
         )
-            .map<ContentElement | undefined>(this.walkNode)
+            .map<ContentElement | undefined>((e) => this.walkNode(e))
             .reduce<ContentElement[]>(
                 (p, c) => (c !== undefined ? p.concat([c]) : p),
                 [],
