@@ -151,9 +151,9 @@
   } from '@/interfaces/ContentElement';
   import { CreateElement, DirectiveOptions, RenderContext, VNode } from 'vue';
   import { VBScrollspy } from 'bootstrap-vue';
-  import { scrollTo } from '@/plugins/directives';
   import { MetaManager } from '@/components/MetaManager';
   import Diffr from 'htmldiff.js';
+  import { scrollTo } from '@/plugins/directives/scrollTo';
 
   type GraphQLPostResponse = { cms_post: Post[] };
 

@@ -1,0 +1,35 @@
+query GetAllUsers {
+    users {
+        created_at
+        email
+        name
+        nickname
+        picture
+        updated_at
+        user_id
+    }
+}
+
+query GetUserByName {
+    users(name: "blake.rogan@purple.telstra.com") {
+        created_at
+        email
+        name
+        nickname
+        picture
+        updated_at
+        user_id
+    }
+}
+
+query GetUserById {
+    user(id: "auth0|5f572cbc0a5f3c006d9d31f7") {
+        created_at
+        email
+        name
+        nickname
+        picture
+        updated_at
+        user_id
+    }
+}

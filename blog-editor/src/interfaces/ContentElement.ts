@@ -22,9 +22,7 @@ export function flattenElement(element: ContentElement): string {
     if (element === null) return '';
     if (typeof element === 'string') return element;
     return (
-        element.children
-            .map(flattenElement)
-            .reduce((previous, current) => previous + current, '') +
+        element.children.map(flattenElement).join('') +
         (element.type === 'p' ? '\n' : '')
     );
 }
