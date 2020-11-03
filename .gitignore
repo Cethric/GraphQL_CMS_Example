@@ -752,4 +752,4 @@ MigrationBackup/
 
 # End of https://www.toptal.com/developers/gitignore/api/macos,windows,linux,webstorm,jetbrains,visualstudio,visualstudiocode,yarn,node,web
 
-server/auth0.env
+server/auth0_secrets.env
