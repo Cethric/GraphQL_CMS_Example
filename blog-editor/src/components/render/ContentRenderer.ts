@@ -21,7 +21,7 @@ export const ContentRenderer: FunctionalComponentOptions = {
         createElement: CreateElement,
         context: RenderContext<{ content: ContentElement[], readonly: boolean }>,
     ): VNode | VNode[] {
-        console.time('ContentRenderer - Render');
+        // console.time('ContentRenderer - Render');
         const content: Array<ContentElement> = cleanContent(context.props.content);
 
         const renderContext: RendererContext = {
@@ -38,7 +38,7 @@ export const ContentRenderer: FunctionalComponentOptions = {
             : createElement('p', {}, 'Hello, World!');
 
         context.parent.$nextTick(() => context.parent.$root.$emit(CONTENT_READY_EVENT, content));
-        console.timeEnd('ContentRenderer - Render');
+        // console.timeEnd('ContentRenderer - Render');
         return result;
     },
 };

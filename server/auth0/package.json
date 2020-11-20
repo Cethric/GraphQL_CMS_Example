@@ -3,27 +3,39 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
-    "apollo-server": "^2.19.0",
+    "apollo-server": "^3.0.0-alpha.3",
     "apollo-server-express": "^3.0.0-alpha.3",
     "auth0": "^2.30.0",
-    "express": "^4.17.1",
-    "express-jwt": "^6.0.0",
+    "express": "^5.0.0-alpha.8",
     "graphql": "^15.4.0",
     "graphql-tag": "^2.11.0",
-    "jsonwebtoken": "^8.5.1",
-    "node-fetch": "^2.6.1",
+    "node-fetch": "^3.0.0-beta.9",
     "tslib": "^2.0.3"
   },
   "devDependencies": {
     "@types/auth0": "^2.20.9",
-    "@types/express": "^4.17.8",
-    "@types/express-jwt": "^0.0.42",
-    "@types/node": "^12.19.3",
+    "@types/express": "^4.17.9",
+    "@types/node": "^12.19.6",
     "dotenv": "^8.2.0",
-    "graphql-tools": "^6.2.6",
+    "graphql-tools": "^7.0.1",
     "nodemon": "^2.0.6",
     "ts-node": "^9.0.0",
-    "typescript": "^4.0.5"
+    "typescript": "^4.1.2"
+  },
+  "eslintConfig": {
+    "root": true,
+    "extends": [
+      "eslint:recommended"
+    ],
+    "parserOptions": {
+      "ecmaVersion": 2020
+    },
+    "env": {
+      "node": true
+    },
+    "rules": {
+      "no-console": "warn"
+    }
   },
   "scripts": {
     "start": "node --inspect=5858 -r ts-node/register -r dotenv/config ./src/index.ts dotenv_config_path=../auth0.env",

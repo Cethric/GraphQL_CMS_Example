@@ -16,13 +16,16 @@ services:
     build:
       context: auth0
       dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
     env_file:
       - auth0.env
+      - auth0_secrets.env
     networks:
       graphql_network:
 
   hasura:
-    image: hasura/graphql-engine:v1.3.2
+    image: hasura/graphql-engine:v1.3.3
     ports:
       - "9000:8080"
     depends_on:

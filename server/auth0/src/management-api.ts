@@ -33,8 +33,8 @@ export class Auth0ManagementAPI {
 
     async getUsers(name?: string): Promise<IUser[]> {
         const query = name ? `name:${name}` : undefined;
-        const users = await this.client.getUsers({ q: query });
-        return users.map((user) => ({
+        const users: User[] = await this.client.getUsers({ q: query });
+        return users.map<IUser>((user) => ({
             user_id: user.user_id,
             created_at: user.created_at,
             updated_at: user.updated_at,
@@ -46,7 +46,7 @@ export class Auth0ManagementAPI {
     }
 
     async getUser(id: string): Promise<IUser> {
-        const user = await this.client.getUser({ id });
+        const user: User = await this.client.getUser({ id });
         return {
             user_id: user.user_id,
             created_at: user.created_at,

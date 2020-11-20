@@ -192,7 +192,10 @@
     CONTENT_READY_EVENT,
     ContentRenderer,
   } from '@/components/render/ContentRenderer';
-  import { EditorMapperController } from '@/components/editor/EditorMapperController';
+  import {
+    EDITOR_MAPPER_CONTROLLER_CONTENT_UPDATE_EVENT,
+    EditorMapperController,
+  } from '@/components/editor/EditorMapperController';
 
   @Component({
     components: {
@@ -237,7 +240,7 @@
     public initialContent: ContentElement[] = [];
     @StoreGetter('theme/isDark')
     private readonly darkTheme!: boolean;
-    @Model('editor:update', {})
+    @Model(EDITOR_MAPPER_CONTROLLER_CONTENT_UPDATE_EVENT, {})
     private model!: ContentElement[];
 
     mounted() {

@@ -1,6 +1,7 @@
 import { BasicElement, ContentElement } from '@/interfaces/ContentElement';
 import { CreateElement, VNode } from 'vue';
 import { BImgLazy } from 'bootstrap-vue';
+import InlineImageEditor from '@/components/editor/tools/InlineImageEditor.vue';
 
 type RecursiveRender = (content: ContentElement, context: RendererContext) => (VNode | undefined);
 
@@ -50,23 +51,29 @@ function renderAnchor(element: BasicElement, context: RendererContext): VNode {
 }
 
 function renderImage(element: BasicElement, context: RendererContext): VNode {
-    // if (context.readonly) {
-    return context.createElement(BImgLazy, {
+    if (context.readonly) {
+        return context.createElement(BImgLazy, {
+            props: {
+                alt: element.attributes['alt'],
+                src: element.attributes['src'],
+                'class': 'w-auto h-auto',
+                fluid: true,
+                center: true,
+                blank: true,
+                blankColor: '#BBB',
+                blankImg: require('@/assets/logo.png'),
+            },
+        });
+    }
+    element.attributes['src'] = element.attributes['src'] || '';
+    element.attributes['alt'] = element.attributes['alt'] || '';
+    console.log('Render Image', element.attributes);
+    const data = {
         props: {
-            src: element.attributes['src'],
-            'class': 'w-auto h-auto',
-            fluid: true,
-            center: true,
-            blank: true,
-            blankColor: '#BBB',
+            data: element.attributes,
         },
-    });
-    // }
-    // return context.createElement(InlineImageEditor, {
-    //     props: {
-    //         data: element.attributes,
-    //     },
-    // });
+    };
+    return context.createElement(InlineImageEditor, data);
 }
 
 function renderElement(element: BasicElement, context: RendererContext): VNode {
