@@ -33,6 +33,7 @@ services:
       - auth0_graphql
     env_file:
       - hasura.env
+      - hasura_secrets.env
     networks:
       graphql_network:
       postgres_network:
