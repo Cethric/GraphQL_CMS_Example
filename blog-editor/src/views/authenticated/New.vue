@@ -6,7 +6,7 @@
     rounded="sm"
     spinner-type="grow"
     spinner-variant="primary"
-    style="min-height:100vh;"
+    style="min-height: 100vh"
     variant="transparent"
   >
     <div class="new">
@@ -19,11 +19,11 @@
         <template v-slot="{ mutate, loading, error }">
           <b-overlay
             :show="loading"
-            rounded
+            class="d-inline-block"
             opacity="0.6"
+            rounded
             spinner-small
             spinner-variant="secondary"
-            class="d-inline-block"
           >
             <b-button
               ref="saveChanges"
@@ -61,6 +61,17 @@
   import { Post } from '@/interfaces/Post';
   import debounce from 'lodash/debounce';
   import { CreateElement, RenderContext, VNode } from 'vue';
+  import { EDITOR_UPDATE_EVENT } from '@/components/editor/Editor.vue';
+  import VueRouter from 'vue-router';
+
+  type NormalisedPost = Pick<Post, 'title'> &
+    Pick<Post, 'description'> &
+    Pick<Post, 'content'> &
+    Pick<Post, 'image'>;
+
+  interface INewPostData {
+    data: { insert_cms_post_one: { id: string } };
+  }
 
   @Component({
     components: {
@@ -90,7 +101,7 @@
     @RouteKey('name')
     private routeName!: string;
     @RouteKey('params')
-    private routeParams!: object;
+    private routeParams!: Record<string, unknown>;
     @StoreGetter('theme/isDark')
     private readonly darkTheme!: boolean;
     @Ref('saveChanges')
@@ -103,14 +114,11 @@
 
     private readonly newPost: Post = {
       id: '',
-      // eslint-disable-next-line @typescript-eslint/camelcase
       created_at: '',
-      // eslint-disable-next-line @typescript-eslint/camelcase
       updated_at: '',
       title: '',
       description: [],
       content: [],
-      // eslint-disable-next-line @typescript-eslint/camelcase
       published_at: null,
       image: '',
       permalink: '',
@@ -118,39 +126,39 @@
 
     private loading = true;
 
-    get params(): unknown {
+    get params(): Record<string, unknown> {
       return this.routeParams;
     }
 
-    mounted() {
-      this.$root.$on('editor:update:content', this.contentChanged);
+    mounted(): void {
+      this.$root.$on(EDITOR_UPDATE_EVENT, this.contentChanged);
       this.$root.$on('editor:save', this.writeShortcutChanges);
     }
 
-    beforeDestroy() {
-      this.$root.$off('editor:update:content', this.contentChanged);
+    beforeDestroy(): void {
+      this.$root.$off(EDITOR_UPDATE_EVENT, this.contentChanged);
       this.$root.$off('editor:save', this.writeShortcutChanges);
     }
 
-    contentReady() {
+    contentReady(): void {
       this.loading = false;
     }
 
-    writeShortcutChanges() {
+    writeShortcutChanges(): void {
       console.group('ShortcutSave');
       console.log('[ShortcutSave] saving document...');
       this.saveChanges.click();
       console.groupEnd();
     }
 
-    writeChanges() {
+    writeChanges(): void {
       console.group('AutoSave');
       console.log('[AutoSave] saving document...');
       this.saveChanges.click();
       console.groupEnd();
     }
 
-    normaliseNewVariables(post: Post) {
+    normaliseNewVariables(post: Post): NormalisedPost {
       return {
         title: post.title,
         description: post.description,
@@ -159,7 +167,7 @@
       };
     }
 
-    onSaveChangesClick(mutate: () => void) {
+    onSaveChangesClick(mutate: () => void): void {
       console.log('[ManualSave] saving document...');
       this.contentChanged.cancel();
       mutate();
@@ -171,11 +179,12 @@
         data: {
           insert_cms_post_one: { id },
         },
-      }: { data: { insert_cms_post_one: { id: string } } }
-    ) {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-      // @ts-ignore
-      this.$router.push({
+      }: INewPostData
+    ): void {
+      const { $router } = (this as unknown) as {
+        $router: VueRouter;
+      };
+      $router.push({
         name: 'Edit',
         params: {
           id: encodeURIComponent(id),

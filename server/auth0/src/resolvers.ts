@@ -1,4 +1,4 @@
-import { IFieldResolver, IResolvers } from 'apollo-server';
+import { IFieldResolver, IResolvers } from 'graphql-tools';
 import { Auth0ManagementAPI } from './management-api';
 
 interface Context {

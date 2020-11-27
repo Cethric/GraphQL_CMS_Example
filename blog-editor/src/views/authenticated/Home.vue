@@ -21,9 +21,7 @@
             top
           />
           <b-card-body>
-            <b-card-title>
-              Create new draft
-            </b-card-title>
+            <b-card-title> Create new draft </b-card-title>
             <b-card-text>Create a new draft blog post</b-card-text>
             <b-button :to="{ name: 'New' }" variant="primary">
               New Draft

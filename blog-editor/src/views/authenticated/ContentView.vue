@@ -46,10 +46,10 @@
                         <div>
                           {{
                             prepareData(data).published_at ||
-                              prepareData(data).created_at
-                                | moment('calendar', {
-                                  sameElse: 'dddd, MMMM Do YYYY',
-                                })
+                            prepareData(data).created_at
+                              | moment('calendar', {
+                                sameElse: 'dddd, MMMM Do YYYY',
+                              })
                           }}
                         </div>
                       </div>

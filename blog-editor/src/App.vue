@@ -59,7 +59,7 @@
     }
 
     @Watch('darkTheme')
-    themeChanged(newTheme: boolean) {
+    themeChanged(newTheme: boolean): void {
       if (newTheme) {
         document.body.classList.remove('theme-light');
         document.body.classList.add('theme-dark');
@@ -73,7 +73,7 @@
       }
     }
 
-    mounted() {
+    mounted(): void {
       this.themeChanged(this.darkTheme);
     }
   }

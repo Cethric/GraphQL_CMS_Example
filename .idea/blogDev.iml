@@ -12,5 +12,6 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="auth0-spa-js.production" level="application" />
+    <orderEntry type="library" name="postscribe" level="application" />
   </component>
 </module>

@@ -16,13 +16,13 @@ export class MetaManager extends Vue {
         };
     }
 
-    beforeDestroy() {
-        this.resetHeadMeta();
-    }
-
     private static get metaElements(): HTMLMetaElement[] {
         const result = document.getElementsByTagName('meta');
         return Array.from(result);
+    }
+
+    beforeDestroy() {
+        this.resetHeadMeta();
     }
 
     protected updateHeadMeta(title: string, input: MetaManagerInput): void {

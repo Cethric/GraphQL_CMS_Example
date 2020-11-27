@@ -5,7 +5,7 @@
     class="w-100 h-auto inline-image-editor"
     contenteditable="false"
   >
-    <b-img :src="src" :alt="alt" center fluid-grow />
+    <b-img :alt="alt" :src="src" center fluid-grow />
 
     <b-modal
       :id="`inline-image-${src}-editor`"

@@ -34,7 +34,7 @@ export function createUppy(id: string, target: HTMLDivElement): StrictUppy {
         id: tusId,
         resume: true,
         removeFingerprintOnSuccess: true,
-        endpoint: 'http://localhost:1080/files',
+        endpoint: 'https://localhost:1080/files',
         limit: 10,
     } as TusOptions);
     // eslint-disable-next-line

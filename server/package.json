@@ -13,6 +13,7 @@
     "compose-up": "docker-compose -f docker-compose.yaml up --build -d",
     "compose-down": "docker-compose -f docker-compose.yaml down",
     "compose-down-volume": "docker-compose -f docker-compose.yaml down --volume",
-    "hasura": "hasura console --envfile ../hasura.env --project hasura"
+    "hasura:console": "hasura console --envfile ../hasura.env --project hasura",
+    "hasura:migrate": "hasura migrate apply --up all --envfile ../hasura.env --project hasura"
   }
 }

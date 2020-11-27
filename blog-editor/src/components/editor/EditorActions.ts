@@ -21,6 +21,7 @@ export interface EditorActionCommands {
     'justifyRight': undefined;
     'indent': undefined;
     'outdent': undefined;
+    'copy': undefined;
 }
 
 export interface EditorActions {
@@ -42,4 +43,10 @@ export interface EditorActions {
     insertCode(): void;
 
     insertCodeBlock(): void;
+
+    insertGithubEmbed(): void;
+
+    exportForAEM(): void;
+
+    exportToMarkdown(): void;
 }

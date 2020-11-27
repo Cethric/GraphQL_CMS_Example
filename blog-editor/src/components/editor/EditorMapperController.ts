@@ -5,6 +5,7 @@ export const EDITOR_MAPPER_CONTROLLER_CONTENT_UPDATE_EVENT = 'editor:update';
 
 export class EditorMapperController extends KeymapController {
     protected mapChildren(children: NodeListOf<Node>): ContentElement[] {
+        // eslint-disable-next-line prettier/prettier
         return Array.from<unknown, Node>(
             { length: children.length },
             (v, k) => children.item(k),
@@ -28,15 +29,14 @@ export class EditorMapperController extends KeymapController {
             }
             if (/inline-image-.*?/.test(element.id)) {
                 const img = element.getElementsByTagName('img').item(0);
-                console.log('Ignoring inline image editor', element, img);
                 return img === null ? undefined : {
                     type: img.nodeName.toLowerCase(),
                     children: [],
-                    attributes: element
+                    attributes: img
                         .getAttributeNames()
                         .filter((name) => !name.startsWith('data-v-'))
                         .map<{ [key: string]: string }>((name) => ({
-                            [name]: element.getAttribute(name) || name,
+                            [name]: img.getAttribute(name) || name,
                         }))
                         .reduce<{ [key: string]: string }>((p, c) => ({ ...p, ...c }), {}),
                 };

@@ -91,8 +91,6 @@
     }
 
     publishDraft(): void {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-      // @ts-ignore
       const { $apollo } = this;
       console.log('Publish Draft: ', this.post.id, $apollo);
       $apollo

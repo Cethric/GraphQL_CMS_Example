@@ -1,16 +1,22 @@
+/* eslint-disable vue/custom-event-name-casing */
+
 import { Prop, Vue } from 'vue-property-decorator';
 import { EditorActionCommands, EditorActions } from '@/components/editor/EditorActions';
 import { FormatState, FormatStateFontLevel, FormatStateJustify } from '@/components/editor/tools/FormatState';
 import { EditorTools, Tools } from '@/components/editor/tools/Tool';
-import { INSERT_CODE_BLOCK_MODAL_ID, INSERT_LINK_MODAL_ID } from '@/components/editor/tools/constants';
+import {
+    INSERT_CODE_BLOCK_MODAL_ID,
+    INSERT_GITHUB_EMBED_MODAL_ID,
+    INSERT_LINK_MODAL_ID,
+} from '@/components/editor/tools/constants';
 
 export class EditorVueInstance extends Vue implements EditorActions {
     @Prop()
     public readonly id!: string;
-    // eslint-disable-next-line
     public readonly formatState: FormatState = {
         isBold: false,
         isItalic: false,
+        // eslint-disable-next-line
         isUnderline: false,
         isStrikeThrough: false,
         fontLevel: 'P',
@@ -18,16 +24,16 @@ export class EditorVueInstance extends Vue implements EditorActions {
         isAnchor: false,
     };
 
-    protected get editorComp(): EditorActions {
-        return this;
-    }
-
     public get tools(): Tools {
         return EditorTools;
     }
 
+    protected get editorComp(): EditorActions {
+        return this;
+    }
+
     public execCommand<Command extends keyof EditorActionCommands,
-        Value extends EditorActionCommands[Command]>(command: Command, value: Value) {
+        Value extends EditorActionCommands[Command]>(command: Command, value: Value): void {
         let commandValue: string | undefined;
         if (typeof value === 'boolean') {
             commandValue = value ? 'true' : 'false';
@@ -37,7 +43,7 @@ export class EditorVueInstance extends Vue implements EditorActions {
         document.execCommand(command, false, commandValue);
     }
 
-    public resetFormatState() {
+    public resetFormatState(): void {
         this.formatState.isBold = false;
         this.formatState.isItalic = false;
         this.formatState.isUnderline = false;
@@ -47,7 +53,7 @@ export class EditorVueInstance extends Vue implements EditorActions {
         this.formatState.isAnchor = false;
     }
 
-    public processFormatState(node: Node) {
+    public processFormatState(node: Node): void {
         if (node.nodeType === Node.ELEMENT_NODE) {
             const element = node as HTMLElement;
             if (element.style.fontWeight === 'bold') {
@@ -75,7 +81,7 @@ export class EditorVueInstance extends Vue implements EditorActions {
         }
     }
 
-    insertLink() {
+    insertLink(): void {
         this.$root.$emit(
             'bv::show::modal',
             `${this.id}-${INSERT_LINK_MODAL_ID}`,
@@ -83,11 +89,11 @@ export class EditorVueInstance extends Vue implements EditorActions {
         );
     }
 
-    insertImage() {
+    insertImage(): void {
         document.getElementById(`${this.id}-toolbar-item-Image`)?.click();
     }
 
-    insertTable() {
+    insertTable(): void {
         // this.$root.$emit(
         //     'bv::show::modal',
         //     `${this.id}-${InsertTableId}`,
@@ -126,7 +132,7 @@ export class EditorVueInstance extends Vue implements EditorActions {
 
     }
 
-    insertCode() {
+    insertCode(): void {
         const selection = document.getSelection();
         this.execCommand(
             'insertHTML',
@@ -134,11 +140,27 @@ export class EditorVueInstance extends Vue implements EditorActions {
         );
     }
 
-    insertCodeBlock() {
+    insertCodeBlock(): void {
         this.$root.$emit(
             'bv::show::modal',
             `${this.id}-${INSERT_CODE_BLOCK_MODAL_ID}`,
             `#${this.id}`,
         );
+    }
+
+    insertGithubEmbed(): void {
+        this.$root.$emit(
+            'bv::show::modal',
+            `${this.id}-${INSERT_GITHUB_EMBED_MODAL_ID}`,
+            `#${this.id}`,
+        );
+    }
+
+    exportForAEM(): void {
+        return;
+    }
+
+    exportToMarkdown(): void {
+        return;
     }
 }

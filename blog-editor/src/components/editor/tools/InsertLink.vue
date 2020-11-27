@@ -2,9 +2,9 @@
   <b-modal
     :id="`${id}-${modalId}`"
     ref="modal"
+    centered
     siz="sm"
     title="Add Link"
-    centered
     @hidden="resetForm"
     @ok="insertLink"
     @show="resetForm"
@@ -14,9 +14,9 @@
         <b-form-input
           id="link-uri"
           v-model="link"
-          :placeholder="
-            `http://example.com/?count=${Math.floor(Math.random() * 100)}`
-          "
+          :placeholder="`http://example.com/?count=${Math.floor(
+            Math.random() * 100
+          )}`"
           trim
           type="url"
         />

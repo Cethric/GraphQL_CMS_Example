@@ -9,7 +9,6 @@
     variant="transparent"
   >
     <div :class="{ 'theme-dark': darkTheme, 'theme-light': !darkTheme }">
-      <span> Format State: {{ this.formatState }} </span>
       <b-button-toolbar
         :class="{
           toolbar: true,
@@ -99,7 +98,9 @@
       <InsertCodeBlock :id="id" :editor="editorComp" :range="range" />
       <InsertTable :id="id" :editor="editorComp" :range="range" />
       <InsertImage :id="id" :editor="editorComp" :range="range" />
+      <InsertGithubEmbed :id="id" :editor="editorComp" :range="range" />
     </div>
+    <textarea ref="copyArea" class="copyArea"></textarea>
   </b-overlay>
 </template>
 
@@ -109,8 +110,8 @@
   .toolbar {
     border-top-left-radius: bs-variables.$input-border-radius;
     border-top-right-radius: bs-variables.$input-border-radius;
-    top: bs-variables.$navbar-padding-y * 9;
-    z-index: inherit;
+    top: bs-variables.$navbar-padding-y * 9 !important;
+    z-index: inherit !important;
   }
 
   .word-count-container {
@@ -118,7 +119,7 @@
   }
 
   .element-breadcrumb {
-    border-radius: 0;
+    border-radius: 0 !important;
     font-size: 0.9rem;
     padding: 0.25rem 0.75rem;
     z-index: 0;
@@ -144,8 +145,8 @@
 
   .editable-input {
     min-height: 1.2rem;
-    height: auto;
-    border-radius: 0;
+    height: auto !important;
+    border-radius: 0 !important;
     overflow-y: auto;
   }
 
@@ -181,10 +182,16 @@
       background-color: bs-variables.$gray-600;
     }
   }
+
+  .copyArea {
+    position: absolute;
+    top: -30000px;
+    left: -30000px;
+  }
 </style>
 
 <script lang="ts">
-  import { Component, Model, Prop } from 'vue-property-decorator';
+  import { Component, Model, Prop, Ref } from 'vue-property-decorator';
   import ToolbarItem from '@/components/editor/tools/ToolbarItem.vue';
   import { StoreGetter } from '@/store/StoreGetter';
   import { ContentElement } from '@/interfaces/ContentElement';
@@ -196,9 +203,15 @@
     EDITOR_MAPPER_CONTROLLER_CONTENT_UPDATE_EVENT,
     EditorMapperController,
   } from '@/components/editor/EditorMapperController';
+  import { exportForAEM } from '@/components/editor/tools/exporters/exportForAEM';
+  import { exportToMarkdown } from '@/components/editor/tools/exporters/exportToMarkdown';
+  import InsertGithubEmbed from '@/components/editor/tools/InsertGithubEmbed.vue';
+
+  export const EDITOR_UPDATE_EVENT = 'editor:update:content';
 
   @Component({
     components: {
+      InsertGithubEmbed,
       ContentRenderer,
       InsertImage: () =>
         import(
@@ -242,8 +255,10 @@
     private readonly darkTheme!: boolean;
     @Model(EDITOR_MAPPER_CONTROLLER_CONTENT_UPDATE_EVENT, {})
     private model!: ContentElement[];
+    @Ref('copyArea')
+    private readonly copyArea!: HTMLTextAreaElement;
 
-    mounted() {
+    mounted(): void {
       this.bindKeymap();
 
       this.initialContent = this.model;
@@ -251,9 +266,12 @@
       this.updateBreadcrumb(this.editor);
 
       this.$root.$on(CONTENT_READY_EVENT, this.handleContentReady);
+      this.$nextTick(() => {
+        this.editor.style.height = `${this.editor.scrollHeight * 1.05}px`;
+      });
     }
 
-    beforeDestroy() {
+    beforeDestroy(): void {
       this.unbindKeymap();
       document.removeEventListener(
         'selectionchange',
@@ -262,7 +280,7 @@
       this.$root.$off(CONTENT_READY_EVENT, this.handleContentReady);
     }
 
-    handleContentReady() {
+    handleContentReady(): void {
       this.loading = false;
       this.calculateStats();
     }
@@ -287,7 +305,7 @@
       }
     }
 
-    updateBreadcrumb(node: Node) {
+    updateBreadcrumb(node: Node): void {
       const nodes: Node[] = [];
       this.resetFormatState();
       if (!this.editor.isEqualNode(node)) {
@@ -307,10 +325,32 @@
       this.breadcrumbs = nodes.map((n) => ({ text: n.nodeName })).reverse();
     }
 
-    inputChange() {
+    inputChange(): void {
       const content = this.mapChildren(this.editor.childNodes);
-      this.$root.$emit('editor:update:content', content);
+      this.$root.$emit(EDITOR_UPDATE_EVENT, content);
       this.calculateStats();
+    }
+
+    exportForAEM(): void {
+      const content = this.mapChildren(this.editor.childNodes);
+      const result = exportForAEM(content);
+      this.copyArea.innerText = result;
+      this.copyArea.select();
+      this.copyArea.setSelectionRange(0, result.length * 2);
+      this.execCommand('copy', undefined);
+    }
+
+    exportToMarkdown(): void {
+      const content = this.mapChildren(this.editor.childNodes);
+      const result = exportToMarkdown(content);
+      this.copyArea.innerText = result;
+      this.copyArea.innerHTML = this.copyArea.innerText.replaceAll(
+        '</br>',
+        '\r\n'
+      );
+      this.copyArea.select();
+      this.copyArea.setSelectionRange(0, result.length * 2);
+      this.execCommand('copy', undefined);
     }
   }
 </script>

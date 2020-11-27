@@ -11,6 +11,7 @@ const app = express();
 
 const schemaServer = new ApolloServer({
     typeDefs,
+// @ts-ignore
     resolvers,
     context: (original: any) => {
         return {

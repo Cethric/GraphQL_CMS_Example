@@ -55,15 +55,13 @@ hljs.registerLanguage('graphql', (e?: HLJSApi): Language => {
 });
 
 export class InlineCodeEditor {
+    private static inlineCodeEditorIds = 0;
     private codeMirror: EditorView | null = null;
     private codeMirrorDiv: HTMLDivElement | null = null;
-
     private readonly observer: MutationObserver;
     private readonly $handleFocus: () => void;
     private readonly $handleBlur: (e: FocusEvent) => void;
     private selectedLanguage: string;
-
-    private static inlineCodeEditorIds = 0;
     private readonly id: string;
 
     constructor(

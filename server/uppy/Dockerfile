@@ -12,7 +12,6 @@ RUN version="$(git tag -l --points-at HEAD)" \
 FROM alpine:latest AS certificate-builder
 RUN apk add openssl
 RUN mkdir -p /keys
-RUN openssl req -x509 -new -newkey rsa:4096 -nodes -sha256 -days 3650 -keyout /keys/tusd.key -out /keys/tusd.pem -subj "/CN=localhost"
 RUN openssl req -x509 -new -newkey rsa:4096 -nodes -sha256 -days 3650 -keyout /keys/companion.key -out /keys/companion.pem -subj "/CN=localhost"
 
 FROM alpine:latest AS uppy-runtime
@@ -25,9 +24,11 @@ RUN mkdir -p /srv/tusd-hooks
 RUN mkdir -p /srv/tusd-data
 RUN chown tusd:tusd /srv/tusd-data
 RUN npm install -g @uppy/companion concurrently
+COPY "cert/localhost+5-key.pem" keys/
+COPY "cert/localhost+5.pem" keys/
 
 WORKDIR /srv/tusd-data
 EXPOSE 1080
 EXPOSE 3020
 ENTRYPOINT ["concurrently"]
-CMD ["--kill-others-on-fail", "--names", "tusd,companion","tusd --hooks-dir /srv/tusd-hooks --upload-dir /srv/tusd-data", "companion"]
+CMD ["--kill-others-on-fail", "--names", "tusd,companion","tusd --hooks-dir /srv/tusd-hooks --upload-dir /srv/tusd-data -tls-certificate=/keys/localhost+5.pem -tls-key=/keys/localhost+5-key.pem", "companion"]

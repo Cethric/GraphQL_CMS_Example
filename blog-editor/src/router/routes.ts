@@ -2,10 +2,13 @@
 
 import { RouteConfig } from 'vue-router';
 
+import Edit from '@/views/authenticated/Edit.vue';
+
 export const routes: RouteConfig[] = [
     {
         path: '/',
         name: 'Home',
+        // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
         component: () =>
             import(
                 /* webpackChunkName: "home" */
@@ -15,6 +18,7 @@ export const routes: RouteConfig[] = [
     {
         path: '/about',
         name: 'About',
+        // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
         component: () =>
             import(
                 /* webpackChunkName: "about" */
@@ -24,17 +28,19 @@ export const routes: RouteConfig[] = [
     {
         path: '/edit/:id',
         name: 'Edit',
-        component: () =>
-            import(
-                /* webpackChunkName: "edit" */
-                /* webpackPrefetch: true */
-                /* webpackPreload: true */
-                '@/views/authenticated/Edit.vue'
-            ),
+        // component: () =>
+        //     import(
+        //         /* webpackChunkName: "edit" */
+        //         /* webpackPrefetch: true */
+        //         /* webpackPreload: true */
+        //         '@/views/authenticated/Edit.vue'
+        //     ),
+        component: Edit,
     },
     {
         path: '/new',
         name: 'New',
+        // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
         component: () =>
             import(
                 /* webpackChunkName: "new" */
@@ -44,6 +50,7 @@ export const routes: RouteConfig[] = [
     {
         path: '/view/:id',
         name: 'View',
+        // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
         component: () =>
             import(
                 /* webpackChunkName: "view" */

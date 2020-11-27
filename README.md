@@ -7,6 +7,8 @@ It includes an Auth0 Apollo GraphQL server to communicate with the Auth0 Managem
 to store the blog posts, and a VueJS PWA for the client side representation and handling of the data, in other words a
 really basic GUI for the CMS to create, update and view blog posts
 
+For information on how to run the application please find the associated `README.md` files in `blog-editor` and `server`
+
 
 [hasura-home]: https://hasura.io/
 

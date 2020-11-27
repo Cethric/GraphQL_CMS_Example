@@ -12,6 +12,7 @@ Mixin Definitions
     & > * {
       @include theme-transition();
     }
+
     code {
       & > * {
         @include theme-transition();

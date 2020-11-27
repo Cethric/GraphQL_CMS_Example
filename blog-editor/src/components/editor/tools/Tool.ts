@@ -1,4 +1,6 @@
 /** @format */
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+
 import { EditorActions } from '@/components/editor/EditorActions';
 
 interface ToolBase {
@@ -233,6 +235,33 @@ export const InsertTools: ToolButton[] = [
         toggled: () => false,
         action: (editor) => editor.insertCodeBlock(),
     },
+    {
+        type: 'button',
+        name: 'Github Embed',
+        icon: 'file-earmark-code',
+        enabled: () => true,
+        toggled: () => false,
+        action: (editor) => editor.insertGithubEmbed(),
+    },
+];
+
+export const ExportTools: ToolButton[] = [
+    {
+        type: 'button',
+        name: 'Export for AEM',
+        icon: 'book',
+        enabled: () => true,
+        toggled: () => false,
+        action: (editor) => editor.exportForAEM(),
+    },
+    {
+        type: 'button',
+        name: 'Export to markdown',
+        icon: 'markdown',
+        enabled: () => true,
+        toggled: () => false,
+        action: (editor) => editor.exportToMarkdown(),
+    },
 ];
 
 export const EditorTools: Tools = {
@@ -241,4 +270,5 @@ export const EditorTools: Tools = {
     justify: JustifyTools,
     indent: IndentTools,
     insert: InsertTools,
+    exporter: ExportTools,
 };

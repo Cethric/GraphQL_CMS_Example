@@ -6,7 +6,7 @@
     rounded="sm"
     spinner-type="grow"
     spinner-variant="primary"
-    style="min-height:100vh;"
+    style="min-height: 100vh"
     variant="transparent"
   >
     <div class="edit">
@@ -26,11 +26,11 @@
               <template v-slot="{ mutate, loading, error }">
                 <b-overlay
                   :show="loading"
-                  rounded
+                  class="d-inline-block"
                   opacity="0.6"
+                  rounded
                   spinner-small
                   spinner-variant="secondary"
-                  class="d-inline-block"
                 >
                   <b-button
                     ref="saveChanges"
@@ -44,11 +44,11 @@
 
                 <b-overlay
                   :show="loading"
-                  rounded
+                  class="d-inline-block"
                   opacity="0.6"
+                  rounded
                   spinner-small
                   spinner-variant="secondary"
-                  class="d-inline-block"
                 >
                   <b-button
                     :disabled="loading"
@@ -91,6 +91,15 @@
   import { Post } from '@/interfaces/Post';
   import debounce from 'lodash/debounce';
   import { CreateElement, RenderContext, VNode } from 'vue';
+  import { EDITOR_UPDATE_EVENT } from '@/components/editor/Editor.vue';
+  import VueRouter from 'vue-router';
+  import { DollarApollo } from 'vue-apollo/types/vue-apollo';
+
+  type NormalisedPost = Pick<Post, 'id'> &
+    Pick<Post, 'title'> &
+    Pick<Post, 'description'> &
+    Pick<Post, 'content'> &
+    Pick<Post, 'image'>;
 
   @Component({
     components: {
@@ -120,7 +129,7 @@
     @RouteKey('name')
     private routeName!: string;
     @RouteKey('params')
-    private routeParams!: object;
+    private routeParams!: Record<string, unknown>;
     @StoreGetter('theme/isDark')
     private readonly darkTheme!: boolean;
     @Ref('saveChanges')
@@ -133,39 +142,40 @@
 
     private loading = true;
 
-    get params(): unknown {
+    get params(): Record<string, unknown> {
       return this.routeParams;
     }
 
-    mounted() {
-      this.$root.$on('editor:update:content', this.contentChanged);
+    mounted(): void {
+      console.log('[Edit] Mounted');
+      this.$root.$on(EDITOR_UPDATE_EVENT, this.contentChanged);
       this.$root.$on('editor:save', this.writeShortcutChanges);
     }
 
-    beforeDestroy() {
-      this.$root.$off('editor:update:content', this.contentChanged);
+    beforeDestroy(): void {
+      this.$root.$off(EDITOR_UPDATE_EVENT, this.contentChanged);
       this.$root.$off('editor:save', this.writeShortcutChanges);
     }
 
-    contentReady() {
+    contentReady(): void {
       this.loading = false;
     }
 
-    writeShortcutChanges() {
+    writeShortcutChanges(): void {
       console.group('ShortcutSave');
       console.log('[ShortcutSave] saving document...');
       this.saveChanges.click();
       console.groupEnd();
     }
 
-    writeChanges() {
+    writeChanges(): void {
       console.group('AutoSave');
       console.log('[AutoSave] saving document...');
       this.saveChanges.click();
       console.groupEnd();
     }
 
-    normaliseVariables(post: Post) {
+    normaliseVariables(post: Post): NormalisedPost {
       return {
         id: post.id,
         title: post.title,
@@ -175,27 +185,28 @@
       };
     }
 
-    onSaveChangesClick(mutate: () => void) {
+    onSaveChangesClick(mutate: () => void): void {
       console.log('[ManualSave] saving document...');
       this.contentChanged.cancel();
       mutate();
     }
 
-    onPublishClick(post: Post) {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-      // @ts-ignore
-      const { $apollo, $router } = this;
+    onPublishClick(post: Post): void {
+      const { $apollo, $router } = (this as unknown) as {
+        $apollo: DollarApollo<Vue>;
+        $router: VueRouter;
+      };
 
       $apollo
-        .mutate({
+        .mutate<unknown, { id: string; published: string }>({
           mutation: require('@/graphql/publish.graphql'),
           variables: {
             id: post.id,
             published: new Date().toUTCString(),
           },
         })
-        .then((data: unknown) => console.log(data))
-        .catch((error: unknown) => console.error(error));
+        .then((data) => console.log(data))
+        .catch((error) => console.error(error));
       $router.push({
         name: 'View',
         params: {

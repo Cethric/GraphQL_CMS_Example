@@ -158,14 +158,14 @@ export const useAuth0 = (options: Auth0PluginOptions) => {
                 }
             },
             /** Gets the access token using a popup window */
-            getTokenWithPopup: function(options?: GetTokenWithPopupOptions) {
+            getTokenWithPopup: function (options?: GetTokenWithPopupOptions) {
                 if (this.auth0Client) {
                     const client: Auth0Client = this.auth0Client;
                     return client.getTokenWithPopup(options);
                 }
             },
             /** Logs the user out and removes their session on the authorization server */
-            logout: function(options: LogoutOptions) {
+            logout: function (options: LogoutOptions) {
                 if (this.auth0Client) {
                     const client: Auth0Client = this.auth0Client;
                     client.logout(options);
